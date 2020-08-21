@@ -24,8 +24,10 @@ router.post("/logIn", async (req, res) => {
 
     if (user.hash === logHash) {
       return res.status(200).json({
-        username: user.account.username,
         _id: user.id,
+        username: user.account.username,
+        name: user.account.name,
+        description: user.account.description,
         token: user.token,
       });
     } else {
