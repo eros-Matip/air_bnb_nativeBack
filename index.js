@@ -7,6 +7,11 @@ const app = express();
 app.use(formidable());
 app.use(cors());
 
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 const sign_up = require("./routes/Create");
 const logIn = require("./routes/Login");
 

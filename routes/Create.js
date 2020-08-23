@@ -9,37 +9,50 @@ const app = express();
 app.use(formidable());
 const router = express.Router();
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
 const User = require("../model/User");
 
 router.post("/sign_up", async (req, res) => {
+  console.log("1");
   try {
     const alReadyExist = await User.findOne({ email: req.fields.email });
+    console.log("2");
     if (alReadyExist) {
+      console.log("3");
+
       return res.status(400).json({ message: `User Already exist` });
     }
     if (req.fields.username === "") {
+      console.log("4");
+
       return res.status(401).json({ message: "username's field is missing" });
     }
     if (req.fields.email === "") {
+      console.log("5");
+
       return res.status(401).json({ message: "email's field is missing" });
     }
     if (req.fields.name === "") {
+      console.log("6");
+
       return res.status(401).json({ message: "name's field is missing" });
     }
     if (req.fields.description === "") {
+      console.log("7");
+
       return res.status(401).json({ message: "description is missing" });
     }
     if (req.fields.password === "") {
+      console.log("8");
+
       return res.status(401).json({ message: "password's field is missing" });
     }
     if (req.fields.password !== req.fields.passwordConfirm) {
+      console.log("9");
+
       return res.status(401).json({ message: "your password is different" });
     } else {
+      console.log("10");
+
       const password = req.fields.password;
       const salt = uid2(16);
       const hash = SHA256(password + salt).toString(encBase64);
@@ -56,7 +69,11 @@ router.post("/sign_up", async (req, res) => {
         hash: hash,
         token: token,
       });
+      console.log("11");
+
       await user.save();
+      console.log("12");
+
       return res.status(200).json({
         id: user.id,
         token: token,
@@ -68,6 +85,8 @@ router.post("/sign_up", async (req, res) => {
       });
     }
   } catch (error) {
+    console.log("13");
+
     return res.status(400).json({ error: error.message });
   }
 });
