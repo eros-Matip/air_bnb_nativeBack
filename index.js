@@ -13,6 +13,6 @@ const logIn = require("./routes/Login");
 app.use(sign_up);
 app.use(logIn);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log(`Server started `);
 });

@@ -9,7 +9,7 @@ const app = express();
 app.use(formidable());
 const router = express.Router();
 
-mongoose.connect("mongodb://localhost/air_bnb", {
+mongoose.connect(`${process.env.MONGODB_URI}/sign_up`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
