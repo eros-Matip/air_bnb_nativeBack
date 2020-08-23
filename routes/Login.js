@@ -12,13 +12,13 @@ router.post("/logIn", async (req, res) => {
     const logPassword = req.fields.password;
 
     if (req.fields.email === "") {
-      return res.status(400).json({ message: "Email missing" });
+      return res.status(401).json({ message: "Email missing" });
     }
     if (req.fields.password === "") {
-      return res.status(400).json({ message: "Password missing" });
+      return res.status(401).json({ message: "Password missing" });
     }
     if (user === null) {
-      return res.status(400).json({ message: "User doesn't exists" });
+      return res.status(401).json({ message: "User doesn't exists" });
     }
     const logHash = SHA256(logPassword + user.salt).toString(encBase64);
 
@@ -31,7 +31,7 @@ router.post("/logIn", async (req, res) => {
         token: user.token,
       });
     } else {
-      return res.status(400).json({ message: "Invalid password " });
+      return res.status(401).json({ message: "Invalid password " });
     }
   } catch (error) {
     console.error({ error: error.message });
