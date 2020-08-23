@@ -9,7 +9,7 @@ const app = express();
 app.use(formidable());
 const router = express.Router();
 
-mongoose.connect(`${process.env.MONGODB_URI}/sign_up`, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
