@@ -12,10 +12,10 @@ router.post("/logIn", async (req, res) => {
     const logPassword = req.fields.password;
 
     if (req.fields.email === "") {
-      return res.status(401).json({ message: "Email missing" });
+      return res.status(400).json({ message: "Email missing" });
     }
     if (req.fields.password === "") {
-      return res.status(401).json({ message: "Password missing" });
+      return res.status(400).json({ message: "Password missing" });
     }
     if (user === null) {
       return res.status(401).json({ message: "User doesn't exists" });
