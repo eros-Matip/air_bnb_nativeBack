@@ -8,16 +8,20 @@ const app = express();
 app.use(formidable());
 app.use(cors());
 
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect("mongodb://localhost/air_bnb", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 const sign_up = require("./routes/Create");
 const logIn = require("./routes/Login");
+// const room = require("./routes/room")
+const updateProfile = require("./routes/UpdateProfile");
 
 app.use(sign_up);
 app.use(logIn);
+// app.use(room);
+app.use(updateProfile);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started `);
