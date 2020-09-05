@@ -1,10 +1,14 @@
 const express = require("express");
 const formidable = require("express-formidable");
+const cloudinary = require("cloudinary").v2;
 
 const app = express();
 app.use(formidable());
 
+// Importation des Models
 const User = require("../model/User");
+const Picture = require("../model/Picture");
+// const Picture = require("../model/Picture");
 
 const router = express.Router();
 
@@ -26,36 +30,43 @@ router.post("/profile", async (req, res) => {
     }
     console.log("4");
 
-    if (req.fields.account.username) {
-      user_to_update.account.username = req.fields.account.username;
+    if (req.fields.username) {
+      user_to_update.account.username = req.fields.username;
     }
     console.log("5");
 
-    if (req.fields.account.name) {
-      user_to_update.account.name = req.fields.account.name;
+    if (req.fields.name) {
+      user_to_update.account.name = req.fields.name;
     }
     console.log("6");
 
-    if (req.fields.account.description) {
-      user_to_update.account.description = req.fields.account.description;
+    if (req.fields.description) {
+      user_to_update.account.description = req.fields.description;
     }
+    if (req.files.picture) {
+    }
+    // CLOUDINARY
 
-    await user_to_update.save();
+    const profile_picture = req.files.picture;
+    const result = await cloudinary.uploader.upload(profile_picture.path);
+
+    const picture_to_create = new Picture({
+      type: "profile_picture",
+      infos: result,
+    });
     console.log("7");
-
-    // const profile_picture_displayed = {};
-    // profile_picture_displayed.id = user_to_update.profile_picture;
-    // profile_picture_displayed.secure_url =
-    //   user_to_update.profile_picture.infos.secure_url;
+    await user_to_update.save();
+    await picture_to_create.save();
 
     res.status(200).json({
       message: "profile uploaded",
       email: user_to_update.email,
-      username: user_to_update.account.username,
-      name: user_to_update.account.name,
-      description: user_to_update.account.description,
-
-      //   picture: profile_picture_displayed,
+      account: {
+        username: user_to_update.account.username,
+        name: user_to_update.account.name,
+        description: user_to_update.account.description,
+      },
+      picture: result,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
