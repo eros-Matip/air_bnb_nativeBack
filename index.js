@@ -22,10 +22,12 @@ cloudinary.config({
 const sign_up = require("./routes/Create");
 const logIn = require("./routes/Login");
 const updateProfile = require("./routes/UpdateProfile");
+// const profilPicture = require("./routes/ProfilePicture");
 
 app.use(sign_up);
 app.use(logIn);
 app.use(updateProfile);
+// app.use(profilPicture);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "Bad URL" });

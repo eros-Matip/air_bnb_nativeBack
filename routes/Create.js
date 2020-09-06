@@ -17,23 +17,20 @@ router.post("/sign_up", async (req, res) => {
     if (alReadyExist) {
       return res.status(400).json({ message: `User Already exist` });
     }
-    if (req.fields.username === "") {
+    if (req.fields.username) {
       return res.status(401).json({ message: "username's field is missing" });
     }
-    if (req.fields.email === "") {
+    if (req.fields.email) {
       return res.status(401).json({ message: "email's field is missing" });
     }
-    if (req.fields.name === "") {
+    if (req.fields.name) {
       return res.status(401).json({ message: "name's field is missing" });
     }
-    if (req.fields.description === "") {
+    if (req.fields.description) {
       return res.status(401).json({ message: "description is missing" });
     }
-    if (req.fields.password === "") {
+    if (req.fields.password) {
       return res.status(401).json({ message: "password's field is missing" });
-    }
-    if (req.fields.password !== req.fields.passwordConfirm) {
-      return res.status(403).json({ message: "your password is different" });
     } else {
       const password = req.fields.password;
       const salt = uid2(16);
@@ -43,10 +40,11 @@ router.post("/sign_up", async (req, res) => {
       const user = new User({
         email: req.fields.email,
         account: {
-          username: req.fields.username,
-          name: req.fields.name,
-          description: req.fields.description,
+          username: req.fields.account.username,
+          name: req.fields.account.name,
+          description: req.fields.account.description,
         },
+        picture: null,
         salt: salt,
         hash: hash,
         token: token,
@@ -57,11 +55,13 @@ router.post("/sign_up", async (req, res) => {
       return res.status(200).json({
         id: user.id,
         token: token,
+        email: user.email,
         account: {
-          username: req.fields.username,
-          name: req.fields.name,
-          description: req.fields.description,
+          username: user.account.username,
+          name: user.account.name,
+          description: user.account.description,
         },
+        picture: user.picture,
       });
     }
   } catch (error) {

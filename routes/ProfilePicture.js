@@ -1,16 +1,11 @@
 const express = require("express");
-const fomridable = require("express-formidable");
 const cloudinary = require("cloudinary").v2;
-
-const app = express();
-app.use(fomridable());
-
 const User = require("../model/User");
 const Picture = require("../model/Picture");
 
 const router = express.Router();
 
-router.post("/profile/picture", is_authenticated, async (req, res) => {
+router.post("/profile/picture", async (req, res) => {
   try {
     const profile_picture = req.files.profile_picture.path;
     const profile_picture_upload_result = await cloudinary.uploader.upload(
@@ -19,7 +14,6 @@ router.post("/profile/picture", is_authenticated, async (req, res) => {
 
     const picture_to_create = new Picture({
       type: "profile_picture",
-      is_active: true,
       infos: profile_picture_upload_result,
     });
 
